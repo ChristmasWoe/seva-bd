@@ -1,0 +1,264 @@
+.project-page {
+  padding-left: 70px;
+  padding-top: 30px;
+  background: #222831;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-page .header {
+  height: 42px;
+  display: flex;
+  flex-direction: row;
+}
+
+.project-page .header > button {
+  background: #29a19c;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 25px;
+}
+
+.project-page .header > button > p {
+  margin-left: 10px !important;
+  margin: 0;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  /* identical to box height */
+
+  letter-spacing: 0.01em;
+
+  /* Светлая тема/Фон */
+
+  color: #fafafa;
+}
+
+.project-body {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+.project-tasks {
+  width: 566px;
+  height: auto;
+  display: flex;
+  padding: 0 20px;
+  flex-direction: column;
+  max-height: 850px;
+  min-height: 120px;
+  background: #2c3440;
+  /* box-shadow: 0px 10px 25px rgba(29, 52, 54, 0.08); */
+  border-radius: 10px;
+  padding-bottom: 43px;
+}
+
+.project-tasks > h3 {
+  margin: 20px auto 0 auto;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  /* identical to box height */
+
+  letter-spacing: 0.02em;
+
+  /* Акцент */
+
+  color: #29a19c;
+}
+
+.task-line {
+    transition-property: width;
+    transition-duration: 2s;
+    transition-timing-function: linear;
+    transition-delay: 1s;
+  width: 100%;
+  height: 49px;
+  padding: 15px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid rgba(249, 249, 249, 0.2);
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  /* identical to box height */
+
+  letter-spacing: 0.02em;
+
+  /* Темная тема/Белый */
+
+  color: #f9f9f9;
+}
+
+.task-line > svg {
+  cursor: pointer;
+  transition-property: width;
+  transition-duration: 2s;
+  transition-timing-function: linear;
+  transition-delay: 1s;
+}
+
+.project-info {
+  display: flex;
+  margin-left: 38px;
+  flex-direction: column;
+}
+
+.project-progress {
+  width: 382px;
+  height: 211px;
+  display: flex;
+  flex-direction: column;
+  background: #2c3440;
+  /* Smooth shadow */
+  border-radius: 10px;
+}
+
+.project-progress > h3 {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  /* identical to box height */
+
+  letter-spacing: 0.02em;
+
+  /* Акцент */
+
+  color: #29a19c;
+}
+
+.project-progress > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.progress-circle {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  height: 126px;
+}
+
+.progress-circle > h4 {
+  margin: 0 auto;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.02em;
+
+  /* Темная тема/Белый */
+
+  color: #f9f9f9;
+}
+
+.progress-circle > div {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #29a19c;
+  box-sizing: border-box;
+  border-radius: 200px;
+  width: 100px;
+  height: 100px;
+  margin-top: 10px;
+}
+
+.progress-circle > div > p:nth-of-type(1) {
+  margin: 0;
+  height: 49px;
+  margin-top: 17.5px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 49px;
+  letter-spacing: 0.02em;
+
+  /* Акцент */
+
+  color: #29a19c;
+}
+
+.progress-circle > div > p:nth-of-type(2) {
+  margin: 0;
+  height: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.02em;
+
+  /* Темная тема/Белый */
+
+  color: #f9f9f9;
+}
+
+.project-description{
+    box-sizing: border-box;
+    display: flex;
+    padding:20px;
+    flex-direction: column;
+    margin-top:26px;
+    width: 382px;
+    max-width: 382px;
+
+    height: auto;
+    background: #2C3440;
+    border-radius: 10px;
+}
+
+.project-description>h3{
+    font-family: Nunito;
+    font-style: normal;
+    margin: 0;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
+    /* identical to box height */
+  
+    letter-spacing: 0.02em;
+  
+    /* Акцент */
+  
+    color: #29a19c;
+}
+
+.project-description > p{
+    font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 150%;
+/* or 21px */
+
+letter-spacing: 0.02em;
+
+color: #F9F9F9;
+}
