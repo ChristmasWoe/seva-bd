@@ -1,0 +1,69 @@
+.dropdown > button{
+    width: 315px;
+    padding:8px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+box-sizing: border-box;
+border-radius: 8px;
+outline: none !important;
+background: transparent !important;
+font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 19px;
+/* identical to box height */
+box-shadow: none !important;
+letter-spacing: 0.02em;
+text-align: inherit !important;
+
+color: #FFFFFF;
+}
+
+.dropdown > button::after{
+    position: absolute !important;
+    top: 18px !important;
+    right: 8px !important;
+}
+
+.drop-down > option{
+    background: #222831;
+    height:28px  !important;
+    padding:4px 8px !important;
+    min-height: 28px !important;
+    max-height: 28px !important;
+    font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 19px;
+/* identical to box height */
+
+letter-spacing: 0.02em;
+
+color: #FFFFFF;
+}
+
+.dropdown-menu{
+    background: #222831 !important;
+    width: 315px !important;
+}
+
+.dropdown-menu > button{
+    background: #222831;
+    font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 16px;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.025em;
+
+/* Темная тема/Белый */
+
+color: #F9F9F9;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);}
+
+.dropdown-menu > button:nth-of-type(1){
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

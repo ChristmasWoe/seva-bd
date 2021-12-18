@@ -68,7 +68,8 @@
 }
 
 .project-line > p {
-  margin-left: 10px;
+  margin: 0;
+  margin-left: 10px !important;
   font-family: Nunito;
   font-style: normal;
   font-weight: normal;

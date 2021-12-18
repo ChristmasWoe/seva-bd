@@ -1,0 +1,127 @@
+
+/* #task-composer-wrapper > div > div > div{
+  border: 1px solid rgba(131, 131, 131, 0.25); 
+   border-radius: 10px !important; 
+   box-sizing: border-box; 
+  * box-shadow: 17px 24px 63px #000000; 
+} */
+
+.task-composer{
+    width: 100%;
+    background: #222831 !important;
+    padding:20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+   
+  }
+  
+  .task-composer-header {
+    width: 100%;
+  
+  }
+  
+  .task-composer-header > h3{
+    height:27px;
+    margin: 0;
+    font-family: Nunito;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 27px;
+  letter-spacing: 0.02em;
+  color: #29A19C;
+  }
+  
+  .task-composer-input {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .task-composer-input > p{
+    margin: 0;
+    font-family: Nunito;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: 0.02em;
+  color: #FFFFFF;
+  }
+  
+  .task-composer-input > input{
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
+  background:transparent;
+  padding:8px 15px;
+  outline: none !important;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  
+  letter-spacing: 0.02em;
+  
+  color: #FFFFFF;
+  }
+
+.task-composer-select-line {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+  
+.task-composer-dropdown {
+  width: 315px;
+}
+
+.task-composer-dropdown > p{
+  margin-bottom:10px;
+  font-family: Nunito;
+font-style: normal;
+font-weight: bold;
+font-size: 14px;
+line-height: 19px;
+/* identical to box height */
+
+letter-spacing: 0.02em;
+
+/* Светлая тема/Белый */
+
+color: #FFFFFF;
+}
+
+
+.task-composer-footer {
+    height: 42px;
+    width:100%;
+    display: flex;
+    margin-top: 45px;
+    flex-direction: row;
+}
+
+.task-composer-footer > button {
+    cursor: pointer;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-family: Nunito;
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.01em;
+
+/* Светлая тема/Фон */
+
+color: #FAFAFA;
+}

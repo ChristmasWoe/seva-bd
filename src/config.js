@@ -1,3 +1,3 @@
 export const Config = {
-    url:"",
+    url:"http://localhost:8080/",
 }

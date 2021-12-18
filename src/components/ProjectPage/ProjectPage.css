@@ -14,6 +14,7 @@
 }
 
 .project-page .header > button {
+  cursor: pointer;
   background: #29a19c;
   border-radius: 8px;
   border: none;

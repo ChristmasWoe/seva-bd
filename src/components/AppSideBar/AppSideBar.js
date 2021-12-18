@@ -2,13 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./AppSideBar.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { Config } from "../../config";
+import {useSelector} from "react-redux";
 
-const mockArray = [
-  { name: "", label: "Дом", id: "1", color: "#ECCA75" },
-  { name: "", label: "Семья", id: "2", color: "#F05454" },
-  { name: "", label: "Работа", id: "3", color: "#29A19C" },
-  { name: "", label: "Спорт", id: "4", color: "#4DA0F1" },
-];
 
 const ProjectLine = ({ label, id, color, ...props }) => {
   const history = useNavigate();
@@ -26,6 +21,9 @@ const ProjectLine = ({ label, id, color, ...props }) => {
 };
 
 const AppSideBar = ({ ...props }) => {
+  const projects = useSelector(state=>state.ProjectReducer.projects);
+
+
   return (
     <div className="AppSideBar">
       <div className="header">
@@ -47,12 +45,12 @@ const AppSideBar = ({ ...props }) => {
       </div>
       <div style={{ marginTop: "30px" }} className="section">
         <p>Проекты</p>
-        {mockArray.map((project, i) => (
+        {projects.map((project, i) => (
           <ProjectLine
             key={i}
-            color={project.color}
-            label={project.label}
-            id={project.id}
+            color={project.Color}
+            label={project.Name}
+            id={project.Id}
           />
         ))}
       </div>
