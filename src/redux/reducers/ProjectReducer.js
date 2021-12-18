@@ -19,6 +19,6 @@ export const ProjectReducer = (state = initialState, action = {}) => {
     case FETCH_PROJECTS_FAILED:
       return { ...state,projectsFetching: false };
     default:
-      return initialState;
+      return state;
   }
 };

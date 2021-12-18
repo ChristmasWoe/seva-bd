@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
 import {useSelector} from "react-redux";
-import "./ProjectPage.css";
+// import "./LabelPage.css";
 import { useParams } from "react-router-dom";
 import { Config } from "../../config";
 import TaskComposer from '../TaskComposer/TaskComposer'
 import axios from "axios"
-
+import "../ProjectPage/ProjectPage.css"
 
 const TaskLine = ({ name, id, status, ...props }) => {
   const [isHovered, setHovered] = useState(false);
@@ -100,18 +100,18 @@ const ProgressCircle = ({ label, count, ...props }) => {
   );
 };
 
-const ProjectPage = ({ ...props }) => {
+const LabelPage = ({ ...props }) => {
   const [composerIsOpen, setComposerOpen] = useState(false);
   const [tasks,setTasks] = useState([]);
   const [description,setDescription] = useState("");
   const [projectInfo,setProjectInfo] = useState({created:0,done:0,inprogress:0})
-  const { projectId } = useParams();
-  const projects = useSelector(state=>state.ProjectReducer.projects);
+  const { labelId } = useParams();
+  const projects = useSelector(state=>state.LabelsReducer.labels);
 
   useEffect(()=>{
     const fetchTasks = async () => {
       const bfd = new FormData();
-      bfd.set("project_id",projectId);
+      bfd.set("label_id",labelId);
       axios.post(Config.url+"tasks/get",bfd).then(res=>{
         if(res&&res.data){
           setTasks(res.data)
@@ -119,13 +119,12 @@ const ProjectPage = ({ ...props }) => {
         }
       })
     }
-    if(projectId){
-      let desc = projects.find(pr=>pr.Id==projectId)?.Description||"";
+    if(labelId){
+      let desc = projects.find(pr=>pr.Id==labelId)?.Description||"";
       setDescription(desc);
       fetchTasks()};
-  },[projectId])
+  },[labelId])
 
-  console.log("here",projectId)
   return (
     <div className="project-page">
       <div className="header">
@@ -189,7 +188,7 @@ const ProjectPage = ({ ...props }) => {
         </div>
         <div className="project-info">
           <div className="project-progress">
-            <h3>Успехи в проекте </h3>
+            <h3>Успехи по меткам </h3>
             <div>
               <ProgressCircle label={"Создано"} count={projectInfo.created} />
               <ProgressCircle label={"Завершено"} count={projectInfo.done} />
@@ -197,7 +196,7 @@ const ProjectPage = ({ ...props }) => {
             </div>
           </div>
           <div className="project-description">
-            <h3>Описание проекта</h3>
+            <h3>Описание метки</h3>
             <p>
              {description}
             </p>
@@ -212,4 +211,4 @@ const ProjectPage = ({ ...props }) => {
   );
 };
 
-export default ProjectPage;
+export default LabelPage;

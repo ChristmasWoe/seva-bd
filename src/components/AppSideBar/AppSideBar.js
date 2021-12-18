@@ -20,9 +20,24 @@ const ProjectLine = ({ label, id, color, ...props }) => {
   );
 };
 
+const LabelLine = ({ label, id, color, ...props }) => {
+  const history = useNavigate();
+  const labelId = window.location.pathname.includes("/label/")
+    ? window.location.pathname.substring(9)
+    : null;
+  const isActive = id == labelId;
+  return (
+    <div onClick={(e) => history(`/label/${id}`)} className="project-line">
+      <div style={{ backgroundColor: color, borderRadius:"0" }}></div>
+      <p>{label}</p>
+      {isActive && <div className="active"></div>}
+    </div>
+  );
+};
+
 const AppSideBar = ({ ...props }) => {
   const projects = useSelector(state=>state.ProjectReducer.projects);
-
+  const labels = useSelector(state=>{return state.LabelsReducer.labels});
 
   return (
     <div className="AppSideBar">
@@ -51,6 +66,17 @@ const AppSideBar = ({ ...props }) => {
             color={project.Color}
             label={project.Name}
             id={project.Id}
+          />
+        ))}
+      </div>
+      <div style={{ marginTop: "30px" }} className="section">
+        <p>Метки</p>
+        {labels.map((lb, i) => (
+          <LabelLine
+            key={i}
+            color={lb.Color}
+            label={lb.Name}
+            id={lb.Id}
           />
         ))}
       </div>
