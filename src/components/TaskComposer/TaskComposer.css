@@ -125,3 +125,50 @@ letter-spacing: 0.01em;
 
 color: #FAFAFA;
 }
+
+.task-composer-footer > button:disabled{
+  opacity: 0.4;
+}
+
+.project-composer-header{
+  display: flex;
+  flex-direction: row;
+
+}
+
+.project-composer-header > h3{
+  margin: 0;
+  font-family: Nunito;
+font-style: normal;
+font-weight: bold;
+font-size: 20px;
+line-height: 27px;
+letter-spacing: 0.02em;
+
+/* Акцент */
+
+color: #29A19C;
+}
+
+.composer-palette{
+  margin-left: 28px;
+  background: #2C3440;
+  width: 250px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  padding: 0 22px;
+  justify-content: space-around;
+}
+
+.composer-palette > div{
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+}

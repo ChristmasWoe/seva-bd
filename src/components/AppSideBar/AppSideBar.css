@@ -48,6 +48,29 @@
   color: #29a19c;
 }
 
+.AppSideBar .section > button {
+  cursor: pointer;
+  display: flex;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  flex-direction: row;
+  align-items: center;
+  height: 22px;
+  font-family: Nunito;
+font-style: normal;
+font-weight: normal;
+font-size: 16px;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: 0.025em;
+
+/* Акцент */
+
+color: #29A19C;
+}
+
 .project-line:nth-of-type(1) {
   margin-top: 20px;
 }
