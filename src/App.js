@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import "./App.css";
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { Route, BrowserRouter, Routes,Navigate } from "react-router-dom";
 import AppSideBar from './components/AppSideBar/AppSideBar'
 import ProjectPage from './components/ProjectPage/ProjectPage';
 import LabelPage from './components/LabelPage/LabelPage';
@@ -16,6 +16,7 @@ const App = (props) => {
   const dispatch = useDispatch(); 
   const projectsFetching = useSelector(state=>state.ProjectReducer.projectsFetching);
   const labelsFetching = useSelector(state=>state.LabelsReducer.labelsFetching)
+  const projects = useSelector((state) => state.ProjectReducer.projects);
 
   useEffect(()=>{
     getProjects(dispatch)
@@ -37,6 +38,10 @@ const App = (props) => {
       :
       <BrowserRouter>
       <AppSideBar />
+      <Routes>
+          <Route path="/" exact="true" element={<Navigate to="/project" /> }  />
+          <Route path="/project" exact="true" element={<Navigate to={`/project/${projects[0].Id}`} /> }  />
+        </Routes>
         <Routes>
           <Route path="/project/:projectId" element={<ProjectPage />}  />
         </Routes>
