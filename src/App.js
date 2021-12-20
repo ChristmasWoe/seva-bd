@@ -40,7 +40,7 @@ const App = (props) => {
       <AppSideBar />
       <Routes>
           <Route path="/" exact="true" element={<Navigate to="/project" /> }  />
-          <Route path="/project" exact="true" element={<Navigate to={`/project/${projects[0].Id}`} /> }  />
+          <Route path="/project" exact="true" element={<Navigate to={`/project/${projects.length>0?projects[0].Id:""}`} /> }  />
         </Routes>
         <Routes>
           <Route path="/project/:projectId" element={<ProjectPage />}  />
