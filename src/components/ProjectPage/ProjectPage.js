@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react"
-import {useSelector} from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import "./ProjectPage.css";
 import { useParams } from "react-router-dom";
 import { Config } from "../../config";
-import TaskComposer from '../TaskComposer/TaskComposer'
-import axios from "axios"
+import TaskComposer from "../TaskComposer/TaskComposer";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import DeleteModal from "../DeleteModal/DeleteModal"
 
-
-const TaskLine = ({ name, id, status, ...props }) => {
+const TaskLine = ({ name, id, status,editTask,deleteTask,tick, ...props }) => {
   const [isHovered, setHovered] = useState(false);
 
   return (
@@ -15,9 +16,11 @@ const TaskLine = ({ name, id, status, ...props }) => {
       onMouseEnter={(e) => setHovered(true)}
       onMouseLeave={(e) => setHovered(false)}
       className="task-line"
+      style={{ textDecorationLine: status ? "" : "line-through" }}
     >
-      {isHovered && (
+      {isHovered && status ? (
         <svg
+        onClick={tick}
           style={{ marginRight: "10px" }}
           width="20"
           height="20"
@@ -34,11 +37,50 @@ const TaskLine = ({ name, id, status, ...props }) => {
             stroke="#00AF91"
           />
         </svg>
-      )}
+      ) : isHovered ? (
+        <svg
+        onClick={tick}
+          style={{ marginRight: "10px" }}
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="0.5"
+            y="0.5"
+            width="19"
+            height="19"
+            rx="3.5"
+            stroke="#00AF91"
+          />
+          <g clip-path="url(#clip0_60_107)">
+            <path
+              d="M16.2857 5.69232L8.42861 13.3077L4.85718 9.84617"
+              stroke="#29A19C"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_60_107">
+              <rect
+                width="15"
+                height="9"
+                fill="white"
+                transform="translate(2 5)"
+              />
+            </clipPath>
+          </defs>
+        </svg>
+      ) : null}
       {name}
       {/* edit */}
       {isHovered && (
         <svg
+          onClick={e=>editTask({Id:id})}
           style={{ marginLeft: "auto" }}
           width="18"
           height="18"
@@ -63,6 +105,7 @@ const TaskLine = ({ name, id, status, ...props }) => {
       {/* delete */}
       {isHovered && (
         <svg
+          onClick={deleteTask}
           style={{ marginLeft: "10px" }}
           width="18"
           height="18"
@@ -102,30 +145,74 @@ const ProgressCircle = ({ label, count, ...props }) => {
 
 const ProjectPage = ({ ...props }) => {
   const [composerIsOpen, setComposerOpen] = useState(false);
-  const [tasks,setTasks] = useState([]);
-  const [description,setDescription] = useState("");
-  const [projectInfo,setProjectInfo] = useState({created:0,done:0,inprogress:0})
+  const [tasks, setTasks] = useState([]);
+  const [description, setDescription] = useState("");
+  const [projectInfo, setProjectInfo] = useState({
+    created: 0,
+    done: 0,
+    inprogress: 0,
+  });
+  const [taskToEdit,setTaskToEdit] = useState(null);
   const { projectId } = useParams();
-  const projects = useSelector(state=>state.ProjectReducer.projects);
+  const projects = useSelector((state) => state.ProjectReducer.projects);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [taskToDelete,setTaskToDelete] = useState(null)
 
-  useEffect(()=>{
-    const fetchTasks = async () => {
-      const bfd = new FormData();
-      bfd.set("project_id",projectId);
-      axios.post(Config.url+"tasks/get",bfd).then(res=>{
-        if(res&&res.data){
-          setTasks(res.data)
-          setProjectInfo({created:res.data.length,done:res.data.filter(t=>!t.Status).length,inprogress:res.data.filter(t=>t.Status).length})
-        }
-      })
-    }
-    if(projectId){
-      let desc = projects.find(pr=>pr.Id==projectId)?.Description||"";
+
+  useEffect(() => {
+    if (projectId) {
+      let desc = projects.find((pr) => pr.Id == projectId)?.Description || "";
       setDescription(desc);
-      fetchTasks()};
-  },[projectId])
+      fetchTasks(projectId);
+    }
+  }, [projectId]);
 
-  console.log("here",projectId)
+  const fetchTasks = (projectId) => {
+    const bfd = new FormData();
+    bfd.set("project_id", projectId);
+    axios.post(Config.url + "tasks/get", bfd).then((res) => {
+      if (res && res.data) {
+        setTasks(res.data);
+        setProjectInfo({
+          created: res.data.length,
+          done: res.data.filter((t) => !t.Status).length,
+          inprogress: res.data.filter((t) => t.Status).length,
+        });
+      }
+    });
+  };
+
+  const tickTask = (task) => {
+      let bfd = new FormData();
+   
+      bfd.set("id",task.Id);
+      bfd.set("status",!task.Status)
+      axios.post(Config.url+"task/tick",bfd).then(res=>{
+          if(res&&res.data){
+            if(task.Status){
+            enqueueSnackbar("Задача выполнена",{
+                variant: 'success',
+            })}
+            fetchTasks(projectId)
+          }else{
+            enqueueSnackbar("Что-то пошло не так",{
+                variant: 'error',
+            })
+          }
+      }).catch(e=>{
+        enqueueSnackbar("Что-то пошло не так",{
+            variant: 'error',
+        })
+      })
+  }
+
+  useEffect(() => {
+    if(!composerIsOpen){
+      setTaskToEdit(null)
+    }
+  },[composerIsOpen])
+
+
   return (
     <div className="project-page">
       <div className="header">
@@ -171,6 +258,9 @@ const ProjectPage = ({ ...props }) => {
               <TaskLine
                 key={i}
                 name={task.Name}
+                tick={()=> tickTask({...task})}
+                deleteTask={()=>setTaskToDelete({...task})}
+                editTask={task=>{setTaskToEdit({...task});setComposerOpen(true)}}
                 id={task.Id}
                 status={task.Status}
               />
@@ -182,6 +272,9 @@ const ProjectPage = ({ ...props }) => {
               <TaskLine
                 key={i}
                 name={task.Name}
+                tick={()=> tickTask({...task})}
+                deleteTask={()=>setTaskToDelete({...task})}
+                editTask={task=>{setTaskToEdit({...task});setComposerOpen(true)}}
                 id={task.Id}
                 status={task.Status}
               />
@@ -193,21 +286,29 @@ const ProjectPage = ({ ...props }) => {
             <div>
               <ProgressCircle label={"Создано"} count={projectInfo.created} />
               <ProgressCircle label={"Завершено"} count={projectInfo.done} />
-              <ProgressCircle label={"В процессе"} count={projectInfo.inprogress} />
+              <ProgressCircle
+                label={"В процессе"}
+                count={projectInfo.inprogress}
+              />
             </div>
           </div>
           <div className="project-description">
             <h3>Описание проекта</h3>
-            <p>
-             {description}
-            </p>
+            <p>{description}</p>
           </div>
         </div>
       </div>
 
       {composerIsOpen && (
-        <TaskComposer isOpen={composerIsOpen} setOpen={setComposerOpen} />
+        <TaskComposer
+        refresher={()=>fetchTasks(projectId)}
+          isOpen={composerIsOpen}
+          setOpen={setComposerOpen}
+          tspr={projectId}
+          tid={taskToEdit&&taskToEdit.Id}
+        />
       )}
+      {taskToDelete&&<DeleteModal   refresher={()=>fetchTasks(projectId)} isOpen={taskToDelete!=null} tsname={taskToDelete?.Name||""} tid={taskToDelete?.Id||""} setOpen={setTaskToDelete} />}
     </div>
   );
 };

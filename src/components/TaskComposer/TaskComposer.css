@@ -103,7 +103,7 @@ color: #FFFFFF;
     height: 42px;
     width:100%;
     display: flex;
-    margin-top: 45px;
+    margin-top: auto;
     flex-direction: row;
 }
 

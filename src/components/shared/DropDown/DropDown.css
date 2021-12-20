@@ -1,5 +1,9 @@
 .dropdown > button{
     width: 315px;
+    flex-wrap: wrap;
+    display: flex;
+
+    min-height: 40px;
     padding:8px 15px;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 box-sizing: border-box;
@@ -66,4 +70,14 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.1);}
 
 .dropdown-menu > button:nth-of-type(1){
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chip{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 2px 5px;
+    width: fit-content;
 }

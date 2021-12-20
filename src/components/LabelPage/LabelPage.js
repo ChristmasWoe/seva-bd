@@ -6,8 +6,10 @@ import { Config } from "../../config";
 import TaskComposer from '../TaskComposer/TaskComposer'
 import axios from "axios"
 import "../ProjectPage/ProjectPage.css"
+import { useSnackbar } from "notistack";
+import DeleteModal from "../DeleteModal/DeleteModal"
 
-const TaskLine = ({ name, id, status, ...props }) => {
+const TaskLine = ({ name, id, status,editTask,deleteTask, tick,...props }) => {
   const [isHovered, setHovered] = useState(false);
 
   return (
@@ -15,9 +17,11 @@ const TaskLine = ({ name, id, status, ...props }) => {
       onMouseEnter={(e) => setHovered(true)}
       onMouseLeave={(e) => setHovered(false)}
       className="task-line"
+      style={{ textDecorationLine: status ? "" : "line-through" }}
     >
-      {isHovered && (
+       {isHovered && status ? (
         <svg
+        onClick={tick}
           style={{ marginRight: "10px" }}
           width="20"
           height="20"
@@ -34,11 +38,50 @@ const TaskLine = ({ name, id, status, ...props }) => {
             stroke="#00AF91"
           />
         </svg>
-      )}
+      ) : isHovered ? (
+        <svg
+        onClick={tick}
+          style={{ marginRight: "10px" }}
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="0.5"
+            y="0.5"
+            width="19"
+            height="19"
+            rx="3.5"
+            stroke="#00AF91"
+          />
+          <g clip-path="url(#clip0_60_107)">
+            <path
+              d="M16.2857 5.69232L8.42861 13.3077L4.85718 9.84617"
+              stroke="#29A19C"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_60_107">
+              <rect
+                width="15"
+                height="9"
+                fill="white"
+                transform="translate(2 5)"
+              />
+            </clipPath>
+          </defs>
+        </svg>
+      ) : null}
       {name}
       {/* edit */}
       {isHovered && (
         <svg
+        onClick={e=>editTask({Id:id})}
           style={{ marginLeft: "auto" }}
           width="18"
           height="18"
@@ -63,6 +106,7 @@ const TaskLine = ({ name, id, status, ...props }) => {
       {/* delete */}
       {isHovered && (
         <svg
+        onClick={deleteTask}
           style={{ marginLeft: "10px" }}
           width="18"
           height="18"
@@ -107,23 +151,59 @@ const LabelPage = ({ ...props }) => {
   const [projectInfo,setProjectInfo] = useState({created:0,done:0,inprogress:0})
   const { labelId } = useParams();
   const projects = useSelector(state=>state.LabelsReducer.labels);
+  const [taskToEdit,setTaskToEdit] = useState(null);
+  const [taskToDelete,setTaskToDelete] = useState(null)
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(()=>{
-    const fetchTasks = async () => {
-      const bfd = new FormData();
-      bfd.set("label_id",labelId);
-      axios.post(Config.url+"tasks/get",bfd).then(res=>{
-        if(res&&res.data){
-          setTasks(res.data)
-          setProjectInfo({created:res.data.length,done:res.data.filter(t=>!t.Status).length,inprogress:res.data.filter(t=>t.Status).length})
-        }
-      })
-    }
     if(labelId){
       let desc = projects.find(pr=>pr.Id==labelId)?.Description||"";
       setDescription(desc);
-      fetchTasks()};
+      fetchTasks(labelId)};
   },[labelId])
+
+  const fetchTasks = (labelId) => {
+    const bfd = new FormData();
+    bfd.set("label_id",labelId);
+    axios.post(Config.url+"tasks/get",bfd).then(res=>{
+      if(res&&res.data){
+        setTasks(res.data)
+        setProjectInfo({created:res.data.length,done:res.data.filter(t=>!t.Status).length,inprogress:res.data.filter(t=>t.Status).length})
+      }
+    })
+  }
+
+  const tickTask = (task) => {
+    let bfd = new FormData();
+ 
+    bfd.set("id",task.Id);
+    bfd.set("status",!task.Status)
+    axios.post(Config.url+"task/tick",bfd).then(res=>{
+        if(res&&res.data){
+          if(task.Status){
+          enqueueSnackbar("Задача выполнена",{
+              variant: 'success',
+          })}
+          fetchTasks(labelId)
+        }else{
+          enqueueSnackbar("Что-то пошло не так",{
+              variant: 'error',
+          })
+        }
+    }).catch(e=>{
+      enqueueSnackbar("Что-то пошло не так",{
+          variant: 'error',
+      })
+    })
+}
+
+  useEffect(() => {
+    if(!composerIsOpen){
+      setTaskToEdit(null)
+    }
+  },[composerIsOpen])
+
 
   return (
     <div className="project-page">
@@ -170,6 +250,9 @@ const LabelPage = ({ ...props }) => {
               <TaskLine
                 key={i}
                 name={task.Name}
+                tick={()=> tickTask({...task})}
+                deleteTask={()=>setTaskToDelete({...task})}
+                editTask={task=>{setTaskToEdit({...task});setComposerOpen(true)}}
                 id={task.Id}
                 status={task.Status}
               />
@@ -181,6 +264,9 @@ const LabelPage = ({ ...props }) => {
               <TaskLine
                 key={i}
                 name={task.Name}
+                deleteTask={()=>setTaskToDelete({...task})}
+                tick={()=> tickTask({...task})}
+                editTask={task=>{setTaskToEdit({...task});setComposerOpen(true)}}
                 id={task.Id}
                 status={task.Status}
               />
@@ -205,8 +291,10 @@ const LabelPage = ({ ...props }) => {
       </div>
 
       {composerIsOpen && (
-        <TaskComposer isOpen={composerIsOpen} setOpen={setComposerOpen} />
+        <TaskComposer  tslb={[].concat(labelId)} refresher={()=>fetchTasks(labelId)} isOpen={composerIsOpen} setOpen={setComposerOpen}  tid={taskToEdit&&taskToEdit.Id} />
       )}
+            {taskToDelete&&<DeleteModal   refresher={()=>fetchTasks(labelId)} isOpen={taskToDelete!=null} tsname={taskToDelete?.Name||""} tid={taskToDelete?.Id||""} setOpen={setTaskToDelete} />}
+
     </div>
   );
 };
